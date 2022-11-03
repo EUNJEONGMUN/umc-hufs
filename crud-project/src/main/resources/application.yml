@@ -1,0 +1,10 @@
+server:
+  port: 9090
+
+spring:
+  datasource:
+    platform: mysql
+    url: jdbc:mysql://umc-rds.ccdlf6sjhnlv.ap-northeast-2.rds.amazonaws.com/CRUD_DB?autoReconnect=true
+    username: haena
+    password: umchufs3!!
+    driver-class-name: com.mysql.cj.jdbc.Driver
