@@ -2,6 +2,7 @@ package umc.crudproject.home;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import umc.crudproject.request.NewPostReq;
 import umc.crudproject.response.BoardListRes;
 
 import java.util.List;
@@ -26,6 +27,14 @@ public class HomeService {
     public BoardListRes getBoardPost(int postIdx) throws Exception {
         try {
             return homeRepository.getBoardPost(postIdx);
+        } catch (Exception e) {
+            throw new Exception();
+        }
+    }
+
+    public void newPost(NewPostReq newPostReq) throws Exception {
+        try {
+            homeRepository.newPost(newPostReq);
         } catch (Exception e) {
             throw new Exception();
         }

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import umc.crudproject.request.NewPostReq;
 import umc.crudproject.response.BoardListRes;
 
 import java.util.List;
@@ -35,5 +36,11 @@ public class HomeController {
     public ResponseEntity<BoardListRes> getBoardPost(@PathVariable int postIdx) throws Exception {
         BoardListRes post = homeService.getBoardPost(postIdx);
         return new ResponseEntity<>(post, HttpStatus.OK);
+    }
+
+    @PostMapping("/board/new")
+    public ResponseEntity newPost(@RequestBody NewPostReq newPostReq) throws Exception {
+        homeService.newPost(newPostReq);
+        return new ResponseEntity(HttpStatus.OK);
     }
 }
