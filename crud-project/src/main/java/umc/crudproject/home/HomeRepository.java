@@ -31,4 +31,18 @@ public class HomeRepository {
                         rs.getString("createdAt")
                 ));
     }
+
+    public BoardListRes getBoardPost(int postIdx) {
+        String query = "SELECT idx, title, content, writer, createdAt\n" +
+                "FROM Board\n" +
+                "WHERE status='Y' AND idx=?;";
+        return this.jdbcTemplate.queryForObject(query,
+                (rs, rowNum) -> new BoardListRes(
+                        rs.getInt("idx"),
+                        rs.getString("title"),
+                        rs.getString("content"),
+                        rs.getString("writer"),
+                        rs.getString("createdAt")
+                ), postIdx);
+    }
 }

@@ -3,9 +3,7 @@ package umc.crudproject.home;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import umc.crudproject.response.BoardListRes;
 
 import java.util.List;
@@ -33,4 +31,9 @@ public class HomeController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
+    @GetMapping("/board/{postIdx}")
+    public ResponseEntity<BoardListRes> getBoardPost(@PathVariable int postIdx) throws Exception {
+        BoardListRes post = homeService.getBoardPost(postIdx);
+        return new ResponseEntity<>(post, HttpStatus.OK);
+    }
 }

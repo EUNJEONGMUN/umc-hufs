@@ -22,4 +22,12 @@ public class HomeService {
             throw new Exception();
         }
     }
+
+    public BoardListRes getBoardPost(int postIdx) throws Exception {
+        try {
+            return homeRepository.getBoardPost(postIdx);
+        } catch (Exception e) {
+            throw new Exception();
+        }
+    }
 }
