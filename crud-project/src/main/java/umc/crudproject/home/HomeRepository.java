@@ -65,4 +65,9 @@ public class HomeRepository {
         Object[] parameter = new Object[]{postIdx, password};
         return this.jdbcTemplate.queryForObject(query, int.class, parameter);
     }
+
+    public void deletePost(int postIdx) {
+        String query = "UPDATE Board SET status='N' WHERE idx=?;";
+        this.jdbcTemplate.update(query, postIdx);
+    }
 }

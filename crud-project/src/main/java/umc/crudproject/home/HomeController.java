@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import umc.crudproject.request.DelPostReq;
 import umc.crudproject.request.EditPostReq;
 import umc.crudproject.request.NewPostReq;
 import umc.crudproject.response.BoardListRes;
@@ -55,6 +56,17 @@ public class HomeController {
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
         homeService.editPost(postIdx, editPostReq.getTitle(), editPostReq.getContent());
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PatchMapping("/board/{postIdx}/delete")
+    public ResponseEntity deletePost(
+            @PathVariable int postIdx, @RequestBody DelPostReq delPostReq) throws Exception {
+        if (homeService.checkPassword(postIdx, delPostReq.getPassword())!=1) {
+            log.info("UNAUTHORIZED");
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+        homeService.deletePost(postIdx);
         return new ResponseEntity(HttpStatus.OK);
     }
 }

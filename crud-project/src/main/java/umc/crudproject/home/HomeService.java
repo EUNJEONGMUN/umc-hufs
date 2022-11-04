@@ -55,4 +55,12 @@ public class HomeService {
             throw new Exception();
         }
     }
+
+    public void deletePost(int postIdx) throws Exception {
+        try {
+            homeRepository.deletePost(postIdx);
+        } catch (Exception e) {
+            throw new Exception();
+        }
+    }
 }
