@@ -1,14 +1,17 @@
 package umc.crudproject.home;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import umc.crudproject.request.EditPostReq;
 import umc.crudproject.request.NewPostReq;
 import umc.crudproject.response.BoardListRes;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 public class HomeController {
     
@@ -41,6 +44,17 @@ public class HomeController {
     @PostMapping("/board/new")
     public ResponseEntity newPost(@RequestBody NewPostReq newPostReq) throws Exception {
         homeService.newPost(newPostReq);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PutMapping("/board/{postIdx}")
+    public ResponseEntity editPost(
+            @PathVariable int postIdx, @RequestBody EditPostReq editPostReq) throws Exception {
+        if (homeService.checkPassword(postIdx, editPostReq.getPassword())!=1) {
+            log.info("UNAUTHORIZED");
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+        homeService.editPost(postIdx, editPostReq.getTitle(), editPostReq.getContent());
         return new ResponseEntity(HttpStatus.OK);
     }
 }

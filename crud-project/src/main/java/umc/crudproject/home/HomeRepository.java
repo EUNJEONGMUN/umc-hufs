@@ -52,6 +52,17 @@ public class HomeRepository {
         Object[] parameter = new Object[]{newPostReq.getTitle(), newPostReq.getContent(),
                 newPostReq.getWriter(), newPostReq.getPassword()};
         this.jdbcTemplate.update(query, parameter);
+    }
 
+    public void editPost(int postIdx, String title, String content) {
+        String query = "UPDATE Board SET title=?, content=? WHERE idx=?;";
+        Object[] parameter = new Object[]{title, content, postIdx};
+        this.jdbcTemplate.update(query, parameter);
+    }
+
+    public int checkPassword(int postIdx, String password) {
+        String query = "SELECT EXISTS(SELECT * FROM Board WHERE idx=? AND password=?);";
+        Object[] parameter = new Object[]{postIdx, password};
+        return this.jdbcTemplate.queryForObject(query, int.class, parameter);
     }
 }

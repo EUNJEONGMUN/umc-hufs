@@ -39,4 +39,20 @@ public class HomeService {
             throw new Exception();
         }
     }
+
+    public void editPost(int postIdx, String title, String content) throws Exception {
+        try {
+            homeRepository.editPost(postIdx, title, content);
+        } catch (Exception e) {
+            throw new Exception();
+        }
+    }
+
+    public int checkPassword(int postIdx, String password) throws Exception {
+        try {
+            return homeRepository.checkPassword(postIdx, password);
+        } catch (Exception e) {
+            throw new Exception();
+        }
+    }
 }
