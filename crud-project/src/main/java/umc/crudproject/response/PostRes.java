@@ -1,25 +1,22 @@
 package umc.crudproject.response;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter @Setter
-public class BoardListRes {
+public class PostRes {
     private int idx;
     private String title;
     private String content;
     private String writer;
-    private String updateTime;
 
-    public BoardListRes(String title, String content, String writer) {
+    public PostRes(String title, String content, String writer) {
         this.title = title;
         this.content = content;
         this.writer = writer;
-    }
-
-    @Override
-    public String toString() {
-        return "idx: "+idx+" title: "+ title;
     }
 }

@@ -1,12 +1,17 @@
 package umc.crudproject.home;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import umc.crudproject.request.NewPostReq;
+import umc.config.BaseException;
 import umc.crudproject.response.BoardListRes;
+import umc.crudproject.response.PostRes;
 
 import java.util.List;
 
+import static umc.config.BaseResponseStatus.DATABASE_ERROR;
+
+@Slf4j
 @Service
 public class HomeService {
     @Autowired
@@ -20,7 +25,8 @@ public class HomeService {
         try {
             return homeRepository.getBoardList();
         } catch (Exception e) {
-            throw new Exception();
+            log.error(e.getMessage(), e);
+            throw new BaseException(DATABASE_ERROR);
         }
     }
 
@@ -28,31 +34,35 @@ public class HomeService {
         try {
             return homeRepository.getBoardPost(postIdx);
         } catch (Exception e) {
-            throw new Exception();
+            log.error(e.getMessage(), e);
+            throw new BaseException(DATABASE_ERROR);
         }
     }
 
-    public void newPost(NewPostReq newPostReq) throws Exception {
+    public PostRes newPost(PostRes post, String password) throws Exception {
         try {
-            homeRepository.newPost(newPostReq);
+            return homeRepository.newPost(post, password);
         } catch (Exception e) {
-            throw new Exception();
+            log.error(e.getMessage(), e);
+            throw new BaseException(DATABASE_ERROR);
         }
     }
 
-    public void editPost(int postIdx, String title, String content) throws Exception {
+    public void editPost(PostRes post) throws Exception {
         try {
-            homeRepository.editPost(postIdx, title, content);
+            homeRepository.editPost(post);
         } catch (Exception e) {
-            throw new Exception();
+            log.error(e.getMessage(), e);
+            throw new BaseException(DATABASE_ERROR);
         }
     }
 
-    public int checkPassword(int postIdx, String password) throws Exception {
+    public int checkPassword(int postIdx, String writer, String password) throws Exception {
         try {
-            return homeRepository.checkPassword(postIdx, password);
+            return homeRepository.checkPassword(postIdx, writer, password);
         } catch (Exception e) {
-            throw new Exception();
+            log.error(e.getMessage(), e);
+            throw new BaseException(DATABASE_ERROR);
         }
     }
 
@@ -60,7 +70,8 @@ public class HomeService {
         try {
             homeRepository.deletePost(postIdx);
         } catch (Exception e) {
-            throw new Exception();
+            log.error(e.getMessage(), e);
+            throw new BaseException(DATABASE_ERROR);
         }
     }
 }

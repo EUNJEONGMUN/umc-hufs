@@ -6,5 +6,6 @@ import lombok.Getter;
 public class EditPostReq {
     private String title;
     private String content;
+    private String writer;
     private String password;
 }

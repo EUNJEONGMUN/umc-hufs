@@ -2,11 +2,15 @@ package umc.crudproject.home;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import umc.crudproject.request.NewPostReq;
 import umc.crudproject.response.BoardListRes;
+import umc.crudproject.response.PostRes;
 
 import javax.sql.DataSource;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 
 @Repository
@@ -14,7 +18,7 @@ public class HomeRepository {
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public void setDataSource(DataSource dataSource){
+    public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
@@ -47,22 +51,32 @@ public class HomeRepository {
                 ), postIdx);
     }
 
-    public void newPost(NewPostReq newPostReq) {
+    public PostRes newPost(PostRes post, String password) {
         String query = "INSERT INTO Board(title, content, writer, password) VALUES (?,?,?,?);";
-        Object[] parameter = new Object[]{newPostReq.getTitle(), newPostReq.getContent(),
-                newPostReq.getWriter(), newPostReq.getPassword()};
-        this.jdbcTemplate.update(query, parameter);
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        this.jdbcTemplate.update(c -> {
+            PreparedStatement ps = c.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, post.getTitle());
+            ps.setString(2, post.getContent());
+            ps.setString(3, post.getWriter());
+            ps.setString(4, password);
+            return ps;
+        }, keyHolder);
+        int idx = keyHolder.getKey().intValue();
+        post.setIdx(idx);
+        return post;
+
     }
 
-    public void editPost(int postIdx, String title, String content) {
+    public void editPost(PostRes post) {
         String query = "UPDATE Board SET title=?, content=? WHERE idx=?;";
-        Object[] parameter = new Object[]{title, content, postIdx};
+        Object[] parameter = new Object[]{post.getTitle(), post.getContent(), post.getIdx()};
         this.jdbcTemplate.update(query, parameter);
     }
 
-    public int checkPassword(int postIdx, String password) {
-        String query = "SELECT EXISTS(SELECT * FROM Board WHERE idx=? AND password=?);";
-        Object[] parameter = new Object[]{postIdx, password};
+    public int checkPassword(int postIdx, String writer, String password) {
+        String query = "SELECT EXISTS(SELECT * FROM Board WHERE idx=? AND writer=? AND password=?);";
+        Object[] parameter = new Object[]{postIdx, writer, password};
         return this.jdbcTemplate.queryForObject(query, int.class, parameter);
     }
 
